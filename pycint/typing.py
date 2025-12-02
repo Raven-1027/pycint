@@ -1,10 +1,15 @@
-from typing import Callable, TypeAlias, no_type_check, type_check_only
+from typing import Callable, TypeAlias, no_type_check
+
+try:
+    from typing import type_check_only
+except ImportError:
+
+    def type_check_only(cls):
+        return cls
+
 
 import numpy as np
-from typing_extensions import TypeVar
 
-# Type variables
-T = TypeVar("T")
 # Complex type for _Complex in C
 Complex: TypeAlias = complex
 
@@ -13,6 +18,7 @@ CallbackFunc: TypeAlias = Callable[..., int]
 VoidCallbackFunc: TypeAlias = Callable[..., None]
 
 
+@type_check_only
 class CData:
     """Base class for cffi C-compatible data structures.
 
@@ -22,6 +28,7 @@ class CData:
     """
 
 
+@type_check_only
 class Ptr[T](CData):
     """Generic pointer type that supports arithmetic operations (+, -, []).
 
@@ -53,6 +60,7 @@ class Ptr[T](CData):
     def __getitem__(self, index: int) -> T: ...
 
 
+@type_check_only
 class CArray[T](Ptr[T]):
     """Array type derived from Ptr, with length information.
 
@@ -77,6 +85,7 @@ type CallbackFunc = Callable[..., int]
 type VoidCallbackFunc = Callable[..., None]
 
 
+@type_check_only
 class PairData(CData):
     """Corresponds to C PairData struct."""
 
@@ -85,6 +94,7 @@ class PairData(CData):
     cceij: float
 
 
+@type_check_only
 class CINTOpt(CData):
     """Corresponds to C CINTOpt struct."""
 
@@ -96,6 +106,7 @@ class CINTOpt(CData):
     pairdata: Ptr[Ptr[PairData]]  # PairData **pairdata
 
 
+@type_check_only
 class CINTEnvVars(CData):
     """Corresponds to C CINTEnvVars struct."""
 
