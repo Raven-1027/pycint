@@ -1,0 +1,18 @@
+# Python
+**/__pycache__
+offline
+.venv*
+*.egg-info
+.hypothesis
+
+# C extensions
+build
+include
+lib
+libcint
+*.so
+.lib_path
+
+# IDE
+.vscode
+.zed
