@@ -4,6 +4,7 @@ version = "6.1.3.2"
 description = "Python wrapper for libcint."
 dependencies = [
   "numpy>=2",
+  "cffi>=2",
 ]
 authors = [
   { name = "Ihe Fan", email = "ih.fan.1027@gmail.com" },
