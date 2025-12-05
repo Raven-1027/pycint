@@ -8,7 +8,6 @@ the libcint C library and Python bindings using cffi.
 
 import os
 import subprocess
-import sys
 from pathlib import Path
 
 import setuptools.command.install
@@ -69,7 +68,7 @@ class CMakeBuild(build_ext):
         # Configure CMake args
         cmake_args = [
             f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={extdir}",
-            f"-DPYTHON_EXECUTABLE={os.sys.executable}",
+            # f"-DPYTHON_EXECUTABLE={sys.executable}",
             f"-DCMAKE_INSTALL_PREFIX={extdir}",
             "-DBUILD_SHARED_LIBS=ON",
             "-DENABLE_EXAMPLE=OFF",
@@ -180,17 +179,11 @@ class InstallCommand(setuptools.command.install.install):
                 self.copy_file(src, dst)
 
 
-# Only clone libcint if we're in development mode and not in a clean build environment
-if os.path.exists("setup.py"):
-    # Only clone if we're in development mode
-    if os.path.exists("libcint") or "--inplace" in sys.argv:
-        get_libcint()
-        compile_ffi()
+compile_ffi()
 
 
 setup(
     name="pycint",
-    version="6.1.3.0",
     packages=find_packages(),
     ext_modules=[CMakeExtension("libcint")],
     cmdclass={
@@ -198,6 +191,16 @@ setup(
         "install": InstallCommand,
     },
     install_requires=["numpy>=2", "cffi>=2"],
-    package_data={"": ["*.so", "*.so.*", "*.h"]},
+    package_data={
+        "": [
+            "*.so",
+            "*.so.*",
+            "*.h",
+            "libcint/include/*",
+            "libcint/src/*",
+            "libcint/CMakeLists.txt",
+            "libcint/LICENSE",
+        ]
+    },
     include_package_data=True,
 )
